@@ -4,7 +4,6 @@ from .forms import ArticleForm
 
 def index(request):
     articles = Article.objects.all()
-
     context = {
         'articles': articles, 
     }
@@ -47,8 +46,19 @@ def create(request):
 def delete(request, id):
     article = Article.objects.get(id=id)
     article.delete()
-
     return redirect('articles:index')
 
 def update(request, id):
-    pass
+    article = Article.objects.get(id=id)
+    if request.method =='POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            article = form.save()
+            return redirect('articles:index')
+
+    else:
+        form = ArticleForm(instance=article)  
+    context = {
+        'form': form,
+    }
+    return render(request, 'update.html', context) 
