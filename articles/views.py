@@ -53,7 +53,7 @@ def update(request, id):
     if request.method =='POST':
         form = ArticleForm(request.POST, instance=article)
         if form.is_valid():
-            article = form.save()
+            form.save()
             return redirect('articles:index')
     else:
         form = ArticleForm(instance=article)  
